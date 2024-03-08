@@ -12,10 +12,15 @@ export default function NavigationBar() {
       <NavigationMenu className="">
         <NavigationMenuList className="">
           <NavigationMenuItem>
-            <NavigationMenuLink href="/home">Home</NavigationMenuLink>
+            <NavigationMenuLink href="/">Home</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/login">Login</NavigationMenuLink>
+            <NavigationMenuLink href="/auth/login">Login</NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="/auth/register">
+              Register
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
