@@ -12,13 +12,24 @@ import { Label } from "@/components/ui/label";
 
 type Inputs = {
   email: string;
+  username: string;
   password: string;
 };
 
 export default function RegisterForm() {
   const { register, handleSubmit } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    data.username = "test";
+    const newData = await fetch("http://localhost:3000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    console.log(newData);
+  };
 
   return (
     <>
