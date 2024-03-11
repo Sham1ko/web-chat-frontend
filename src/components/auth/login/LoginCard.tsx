@@ -12,7 +12,7 @@ import LoginForm from "./LoginForm";
 export default function LoginCard() {
   return (
     <>
-      <Card className="mx-auto flex w-full flex-col justify-center  sm:w-[350px]">
+      <Card className="mx-auto flex w-full flex-col justify-center max-w-md bg-white bg-opacity-10 backdrop-blur-md  ">
         <CardHeader>
           <CardTitle>Welcome back!</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>

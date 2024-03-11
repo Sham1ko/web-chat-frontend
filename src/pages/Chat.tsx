@@ -1,8 +1,7 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const ChatApp = () => {
+export default function ChatPage() {
   const [socket, setSocket] = useState<any>(null);
   const [messages, setMessages] = useState<any>([]);
   const [messageInput, setMessageInput] = useState("");
@@ -57,6 +56,4 @@ const ChatApp = () => {
       </div>
     </div>
   );
-};
-
-export default ChatApp;
+}

@@ -4,6 +4,7 @@ import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import AuthLayout from "@/layouts/Auth";
 import LandingLayout from "@/layouts/Landing";
+import ChatPage from "@/pages/Chat";
 
 export default function Router() {
   const allRoutes = [
@@ -34,6 +35,10 @@ export default function Router() {
           element: <Register />,
         },
       ],
+    },
+    {
+      path: "/chat",
+      element: <ChatPage />,
     },
   ];
 
