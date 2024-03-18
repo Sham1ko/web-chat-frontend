@@ -18,7 +18,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (socket) {
       socket.on("message", (message: any) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages: any) => [...prevMessages, message]);
       });
 
       socket.emit("getMessageHistory");
