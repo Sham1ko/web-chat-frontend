@@ -1,3 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Archive } from "lucide-react";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
@@ -36,7 +44,28 @@ export default function ChatPage() {
   };
 
   return (
-    <div>
+    <div className="flex h-screen flex-col">
+      <div className="flex items-center p-2">
+        <div className="flex items-center gap-2 text-sm">
+          <div className="grid gap-1">
+            <div className="font-semibold">{socket?.id}</div>
+            <div className="line-clamp-1 text-xs">
+              <span className="font-medium">Reply-To:</span> sd
+            </div>
+          </div>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Archive className="h-4 w-4" />
+                <span className="sr-only">Archive</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Archive</TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+      <Separator />
       <h1>Chat App</h1>
       <div>
         {messages.map((message, index) => (

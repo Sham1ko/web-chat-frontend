@@ -5,21 +5,22 @@ import Register from "@/pages/auth/Register";
 import AuthLayout from "@/layouts/Auth";
 import LandingLayout from "@/layouts/Landing";
 import ChatPage from "@/pages/Chat";
+import DashboardLayout from "@/layouts/dashboard";
 
 export default function Router() {
   const allRoutes = [
     {
-      path: "/",
+      path: "/landing",
       element: <LandingLayout />,
       children: [
         {
-          path: "/",
+          index: true,
           element: <Home />,
         },
       ],
     },
     {
-      path: "/auth",
+      path: "auth",
       element: <AuthLayout />,
       children: [
         {
@@ -27,18 +28,24 @@ export default function Router() {
           index: true,
         },
         {
-          path: "/auth/login",
+          path: "login",
           element: <Login />,
         },
         {
-          path: "/auth/register",
+          path: "register",
           element: <Register />,
         },
       ],
     },
     {
-      path: "/chat",
-      element: <ChatPage />,
+      path: "/",
+      element: <DashboardLayout />,
+      children: [
+        {
+          index: true,
+          element: <ChatPage />,
+        },
+      ],
     },
   ];
 
