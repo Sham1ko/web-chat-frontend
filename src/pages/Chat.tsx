@@ -1,5 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -36,7 +39,8 @@ export default function ChatPage() {
     }
   }, [socket]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e: any) => {
+    e.preventDefault();
     if (messageInput.trim() !== "") {
       socket.emit("message", messageInput);
       setMessageInput("");
@@ -49,9 +53,6 @@ export default function ChatPage() {
         <div className="flex items-center gap-2 text-sm">
           <div className="grid gap-1">
             <div className="font-semibold">{socket?.id}</div>
-            <div className="line-clamp-1 text-xs">
-              <span className="font-medium">Reply-To:</span> sd
-            </div>
           </div>
 
           <Tooltip>
@@ -66,22 +67,30 @@ export default function ChatPage() {
         </div>
       </div>
       <Separator />
-      <h1>Chat App</h1>
-      <div>
+      <ScrollArea className="p-4 h-full">
         {messages.map((message, index) => (
-          <div key={index}>
+          <div key={index} className="border-black border-2 mb-2">
             <strong>{message.user}: </strong>
             <span>{message.text}</span>
           </div>
         ))}
-      </div>
-      <div>
-        <input
-          type="text"
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Send</button>
+      </ScrollArea>
+      <Separator className="mt-auto" />
+      <div className="p-4">
+        <form>
+          <div className="flex">
+            <Textarea
+              className="mr-3"
+              placeholder={`Send message...`}
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+            />
+            <Button onClick={handleSendMessage} size="sm">
+              Send
+            </Button>
+            <div className="flex items-center"></div>
+          </div>
+        </form>
       </div>
     </div>
   );
