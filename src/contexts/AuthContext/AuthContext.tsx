@@ -3,6 +3,7 @@ import { createContext } from "react";
 
 export type User = {
   email: string;
+  username: string;
   permissions: string[];
   roles: string[];
 };
@@ -20,6 +21,6 @@ export type AuthContextData = {
   signOut: () => void;
 };
 
-const AuthContext = createContext({});
+const AuthContext = createContext({} as AuthContextData);
 
 export default AuthContext;
