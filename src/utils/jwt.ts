@@ -13,7 +13,7 @@ const isValidToken = (accessToken: string) => {
 
 const saveTokensToStorage = (accessToken: string, refreshToken: string) => {
   localStorage.setItem("accessToken", accessToken);
-  Cookies.set("refreshToken", refreshToken, { httpOnly: true });
+  Cookies.set("refreshToken", refreshToken, { httpOnly: false });
 };
 
 const removeCookiesFromStorage = () => {
@@ -21,12 +21,18 @@ const removeCookiesFromStorage = () => {
   Cookies.remove("refreshToken");
 };
 
-const getAccessToken = () => {
+const getAccessToken = (): string | null => {
   return localStorage.getItem("accessToken");
 };
+
+const getRefreshToken = (): string | undefined => {
+  return Cookies.get("refreshToken");
+};
+
 export {
   isValidToken,
   saveTokensToStorage,
   removeCookiesFromStorage,
   getAccessToken,
+  getRefreshToken,
 };

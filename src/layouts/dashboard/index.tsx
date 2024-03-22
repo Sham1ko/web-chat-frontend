@@ -8,7 +8,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import {
   Inbox,
   Send,
@@ -22,7 +22,7 @@ import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout({
   defaultCollapsed = false,
-  defaultLayout = [300, 440, 655],
+  defaultLayout = [20, 40, 40],
   navCollapsedSize = 4,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);

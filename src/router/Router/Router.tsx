@@ -1,71 +1,74 @@
-import { Routes, Route } from "react-router-dom";
-import { useRoutePaths } from "@/hooks";
-import { Home, Login, Metrics, Register, Users } from "@/pages";
-import { PrivateRoute } from "../PrivateRoute";
-import { PublicRoute } from "../PublicRoute";
+import { ComponentType, ReactNode, Suspense } from "react";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
+import AuthLayout from "@/layouts/Auth";
+import LandingLayout from "@/layouts/Landing";
+import DashboardLayout from "@/layouts/dashboard";
+import Login from "@/pages/auth/Login";
+import Register from "@/pages/auth/Register";
+import Home from "@/pages/Home";
+import ChatPage from "@/pages/chat";
+import { AuthGuard, GuestGuard } from "@/guards";
 
-function Router() {
-  const {
-    LOGIN_PATH,
-    METRICS_PATH,
-    REGISTER_PATH,
-    ROOT_PATH,
-    USERS_PATH,
-    USER_PATH,
-  } = useRoutePaths();
+// const Loadable = (Component: ComponentType) => (props: any) => {
+//   const { pathname } = useLocation();
+//   return (
+//     <Suspense
+//       fallback={<LoadingScreen isDashboard={pathname.includes("/vehicles")} />}
+//     >
+//       <Component {...props} />
+//     </Suspense>
+//   );
+// };
 
-  return (
-    <Routes>
-      <Route
-        path={ROOT_PATH}
-        element={
-          <PrivateRoute redirectTo={LOGIN_PATH}>
-            <Home />
-          </PrivateRoute>
-        }
-      />
+export default function Router() {
+  const allRoutes = [
+    {
+      path: "/landing",
+      element: <LandingLayout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+      ],
+    },
+    {
+      path: "auth",
+      element: (
+        <GuestGuard>
+          <AuthLayout />
+        </GuestGuard>
+      ),
+      children: [
+        {
+          element: <Navigate to="/auth/login" replace />,
+          index: true,
+        },
+        {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "register",
+          element: <Register />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <DashboardLayout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <AuthGuard>
+              <ChatPage />,
+            </AuthGuard>
+          ),
+        },
+      ],
+    },
+  ];
 
-      <Route
-        path={LOGIN_PATH}
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-
-      <Route path={REGISTER_PATH} element={<Register />} />
-
-      <Route
-        path={METRICS_PATH}
-        element={
-          <PrivateRoute permissions={["metrics.list"]} redirectTo={LOGIN_PATH}>
-            <Metrics />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path={USERS_PATH}
-        element={
-          <PrivateRoute permissions={["users.list", "users.create"]}>
-            <Users />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path={USER_PATH}
-        element={
-          <PrivateRoute permissions={["users.list", "users.create"]}>
-            <Users />
-          </PrivateRoute>
-        }
-      />
-
-      <Route path="*" element={<h1>404</h1>} />
-    </Routes>
-  );
+  return useRoutes(allRoutes);
 }
-
-export default Router;

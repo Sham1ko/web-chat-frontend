@@ -1,7 +1,10 @@
+import * as Yup from "yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuth } from "@/hooks";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
   email: string;
@@ -9,17 +12,31 @@ type Inputs = {
 };
 
 export default function LoginForm() {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().email().required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const newData = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    console.log(newData);
+  const { register, handleSubmit, reset, setError } = useForm<Inputs>({
+    resolver: yupResolver(LoginSchema),
+  });
+
+  const { signIn } = useAuth();
+
+  const onSubmit: SubmitHandler<Inputs> = async (LoginInputs: Inputs) => {
+    try {
+      await signIn(LoginInputs);
+    } catch (error) {
+      setError("email", {
+        type: "manual",
+        message: "Invalid email or password",
+      });
+      setError("password", {
+        type: "manual",
+        message: "Invalid email or password",
+      });
+      reset();
+    }
   };
 
   return (

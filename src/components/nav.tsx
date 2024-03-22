@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
-import { LucideIcon } from "lucide-react";
+import { LogOut, LucideIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
+import { cn } from "@/utils/utils";
+import { Button, buttonVariants } from "./ui/button";
+import { useAuth } from "@/hooks";
 
 export interface NavProps {
   isCollapsed: boolean;
@@ -20,6 +21,7 @@ export interface NavProps {
 }
 
 export default function Nav({ links, isCollapsed }: NavProps) {
+  const { signOut } = useAuth();
   return (
     <div
       data-collapsed={isCollapsed}
@@ -79,6 +81,20 @@ export default function Nav({ links, isCollapsed }: NavProps) {
             </Link>
           );
         })}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9"
+              onClick={signOut}
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="sr-only">Sign Out</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Sign Out</TooltipContent>
+        </Tooltip>
       </nav>
     </div>
   );

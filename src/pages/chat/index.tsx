@@ -8,7 +8,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Archive } from "lucide-react";
+import { useAuth } from "@/hooks";
+import { Archive, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
@@ -16,6 +17,8 @@ export default function ChatPage() {
   const [socket, setSocket] = useState<any>(null);
   const [messages, setMessages] = useState<any>([]);
   const [messageInput, setMessageInput] = useState("");
+
+  const { signOut, user } = useAuth();
 
   useEffect(() => {
     const newSocket: any = io("localhost:3000");
@@ -42,7 +45,7 @@ export default function ChatPage() {
   const handleSendMessage = (e: any) => {
     e.preventDefault();
     if (messageInput.trim() !== "") {
-      socket.emit("message", messageInput);
+      socket.emit("message", { messageInput, user: user?.username });
       setMessageInput("");
     }
   };
@@ -52,7 +55,7 @@ export default function ChatPage() {
       <div className="flex items-center p-2">
         <div className="flex items-center gap-2 text-sm">
           <div className="grid gap-1">
-            <div className="font-semibold">{socket?.id}</div>
+            <div className="font-semibold">{user?.username}</div>
           </div>
 
           <Tooltip>
@@ -63,6 +66,21 @@ export default function ChatPage() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>Archive</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9"
+                onClick={signOut}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Sign Out</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Sign Out</TooltipContent>
           </Tooltip>
         </div>
       </div>

@@ -6,14 +6,15 @@ import {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import {
-  createSessionCookies,
-  getRefreshToken,
-  getToken,
-  removeSessionCookies,
-} from "@/utils";
+import { removeSessionCookies } from "@/utils";
+import api from "@/services/ApiService";
 import { paths } from "@/router";
-import { api } from "./api";
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveTokensToStorage,
+} from "@/utils/jwt";
+import publicApiService from "./publicApiService";
 
 type FailedRequestQueue = {
   onSuccess: (token: string) => void;
@@ -25,43 +26,37 @@ let failedRequestQueue: FailedRequestQueue[] = [];
 
 type SetAuthorizationHeaderParams = {
   request: AxiosDefaults | AxiosRequestConfig;
-  token: string;
+  accessToken: string | null;
 };
 
 export function setAuthorizationHeader(params: SetAuthorizationHeaderParams) {
-  const { request, token } = params;
+  const { request, accessToken } = params;
 
   (request.headers as Record<string, unknown>)[
     "Authorization"
-  ] = `Bearer ${token}`;
+  ] = `Bearer ${accessToken}`;
 }
 
-function handleRefreshToken(refreshToken: string) {
+function handleRefreshToken(refreshToken: string | undefined) {
   isRefreshing = true;
 
-  api
-    .post(
-      "/refresh",
-      { refreshToken },
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    )
+  publicApiService
+    .post("/auth/refresh", undefined, {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    })
     .then((response) => {
-      const { token } = response.data;
+      const { accessToken, refreshToken } = response.data;
+      saveTokensToStorage(accessToken, refreshToken);
+      setAuthorizationHeader({ request: api.defaults, accessToken });
 
-      createSessionCookies({ token, refreshToken: response.data.refreshToken });
-      setAuthorizationHeader({ request: api.defaults, token });
-
-      failedRequestQueue.forEach((request) => request.onSuccess(token));
+      failedRequestQueue.forEach((request) => request.onSuccess(accessToken));
       failedRequestQueue = [];
     })
     .catch((error) => {
       failedRequestQueue.forEach((request) => request.onFailure(error));
       failedRequestQueue = [];
-
       removeSessionCookies();
     })
     .finally(() => {
@@ -70,10 +65,10 @@ function handleRefreshToken(refreshToken: string) {
 }
 
 function onRequest(config: AxiosRequestConfig) {
-  const token = getToken();
+  const accessToken = getAccessToken();
 
-  if (token) {
-    setAuthorizationHeader({ request: config, token });
+  if (accessToken) {
+    setAuthorizationHeader({ request: config, accessToken });
   }
 
   return config as InternalAxiosRequestConfig;
@@ -95,7 +90,7 @@ function onResponseError(
   error: AxiosError<ErrorCode>
 ): Promise<AxiosError | AxiosResponse> {
   if (error?.response?.status === 401) {
-    if (error.response?.data?.code === "token.expired") {
+    if (error.response?.statusText === "Unauthorized") {
       const originalConfig = error.config as AxiosRequestConfig;
       const refreshToken = getRefreshToken();
 
@@ -105,8 +100,8 @@ function onResponseError(
 
       return new Promise((resolve, reject) => {
         failedRequestQueue.push({
-          onSuccess: (token: string) => {
-            setAuthorizationHeader({ request: originalConfig, token });
+          onSuccess: (accessToken: string) => {
+            setAuthorizationHeader({ request: originalConfig, accessToken });
             resolve(api(originalConfig));
           },
           onFailure: (error: AxiosError) => {

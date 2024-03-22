@@ -1,21 +1,19 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
+import { Link } from "react-router-dom";
 
 export default function LoginCard() {
   return (
     <>
       <Card className="mx-auto flex w-full flex-col justify-center max-w-md bg-white bg-opacity-10 backdrop-blur-md  ">
         <CardHeader>
-          <CardTitle>Welcome back!</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle className="">Sign in to your account</CardTitle>
         </CardHeader>
         <CardContent>
           <LoginForm />

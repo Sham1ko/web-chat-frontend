@@ -1,6 +1,6 @@
 import RegisterForm from "@/components/auth/register/RegisterForm";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { MessagesSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
