@@ -1,15 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks";
-import { Archive, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
@@ -52,42 +45,13 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex items-center p-2">
-        <div className="flex items-center gap-2 text-sm">
-          <div className="grid gap-1">
-            <div className="font-semibold">{user?.username}</div>
-          </div>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Archive className="h-4 w-4" />
-                <span className="sr-only">Archive</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Archive</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9"
-                onClick={signOut}
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="sr-only">Sign Out</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Sign Out</TooltipContent>
-          </Tooltip>
-        </div>
+      <div className="flex min-h-[60px] items-center px-4 py-2">
+        Username: <span className="font-semibold">{user?.username}</span>
       </div>
       <Separator />
-      <ScrollArea className="p-4 h-full">
-        {messages.map((message, index) => (
-          <div key={index} className="border-black border-2 mb-2">
+      <ScrollArea className="p-4">
+        {messages.map((message: any, index: any) => (
+          <div key={index} className="border-1 mb-2">
             <strong>{message.user}: </strong>
             <span>{message.text}</span>
           </div>
@@ -96,17 +60,14 @@ export default function ChatPage() {
       <Separator className="mt-auto" />
       <div className="p-4">
         <form>
-          <div className="flex">
-            <Textarea
-              className="mr-3"
-              placeholder={`Send message...`}
+          <div className="flex w-full items-center space-x-2">
+            <Input
+              type="text"
+              placeholder="Enter your message..."
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
             />
-            <Button onClick={handleSendMessage} size="sm">
-              Send
-            </Button>
-            <div className="flex items-center"></div>
+            <Button onClick={handleSendMessage}>Send</Button>
           </div>
         </form>
       </div>

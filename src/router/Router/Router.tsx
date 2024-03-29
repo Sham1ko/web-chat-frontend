@@ -62,7 +62,7 @@ export default function Router() {
           index: true,
           element: (
             <AuthGuard>
-              <ChatPage />,
+              <ChatPage />
             </AuthGuard>
           ),
         },

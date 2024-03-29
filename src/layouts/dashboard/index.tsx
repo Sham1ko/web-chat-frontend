@@ -1,4 +1,5 @@
 import Nav from "@/components/nav";
+import RecentChats from "@/components/RecentChats";
 import { Input } from "@/components/ui/input";
 import {
   ResizableHandle,
@@ -6,9 +7,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/utils/utils";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import {
   Inbox,
   Send,
@@ -16,8 +16,9 @@ import {
   File,
   Search,
   MessagesSquare,
+  MessageCircleMore,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout({
@@ -64,15 +65,18 @@ export default function DashboardLayout({
           >
             <div
               className={cn(
-                "flex h-[52px] items-center justify-center",
+                "flex h-[60px] items-center justify-center",
                 isCollapsed ? "" : "px-2"
               )}
             >
               {isCollapsed ? (
-                <MessagesSquare />
+                <MessagesSquare size="40px" strokeWidth="2.25px" />
               ) : (
                 <>
-                  <MessagesSquare /> Chat App
+                  <MessagesSquare size="40px" strokeWidth="2.25px" />{" "}
+                  <span className="ml-2">
+                    <span className="font-bold">Chat</span> Platform
+                  </span>
                 </>
               )}
             </div>
@@ -112,12 +116,17 @@ export default function DashboardLayout({
             />
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-            <div className="flex h-[52px] items-center px-4 py-2">
-              <h1 className="text-xl font-bold">Inbox</h1>
+          <ResizablePanel
+            defaultSize={defaultLayout[1]}
+            minSize={30}
+            className="h-screen"
+          >
+            <div className="flex h-[60px] items-center px-4 py-2">
+              <MessageCircleMore />
+              <h1 className="text-xl font-bold ml-1">Chats</h1>
             </div>
             <Separator />
-            <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="p-4">
               <form>
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -125,8 +134,7 @@ export default function DashboardLayout({
                 </div>
               </form>
             </div>
-            {/* <MailList items={mails} /> */}
-            hi
+            <RecentChats />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={defaultLayout[2]}>

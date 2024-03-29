@@ -4,10 +4,11 @@ import api from "@/services/ApiService";
 import { AuthContext, SignInCredentials, User } from "@/contexts/AuthContext";
 import {
   getAccessToken,
-  removeCookiesFromStorage,
+  removeTokensFromStorage,
   saveTokensToStorage,
 } from "@/utils/jwt";
 import { setAuthorizationHeader } from "@/services/interceptors";
+import { AuthService } from "@/services";
 
 type Props = {
   children: ReactNode;
@@ -34,8 +35,9 @@ export default function AuthProvider({ children }: Props) {
     }
   };
 
-  const signOut = () => {
-    removeCookiesFromStorage();
+  const signOut = async () => {
+    await AuthService.logout();
+    removeTokensFromStorage();
     setUser(undefined);
     setLoadingUserData(false);
     navigate("/auth/login");
@@ -43,7 +45,7 @@ export default function AuthProvider({ children }: Props) {
 
   useEffect(() => {
     if (!token) {
-      removeCookiesFromStorage();
+      removeTokensFromStorage();
       setUser(undefined);
       setLoadingUserData(false);
     }
@@ -67,7 +69,7 @@ export default function AuthProvider({ children }: Props) {
         setLoadingUserData(false);
       } catch (error: any) {
         console.error("Failed to fetch user data:", error.message);
-        removeCookiesFromStorage();
+        removeTokensFromStorage();
         setLoadingUserData(false);
       }
     }

@@ -1,3 +1,3 @@
 export * from "./ApiService";
 export * from "./publicApiService";
-export * from "./AuthService";
+export { default as AuthService } from "./AuthService";

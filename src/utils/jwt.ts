@@ -16,7 +16,7 @@ const saveTokensToStorage = (accessToken: string, refreshToken: string) => {
   Cookies.set("refreshToken", refreshToken, { httpOnly: false });
 };
 
-const removeCookiesFromStorage = () => {
+const removeTokensFromStorage = () => {
   localStorage.removeItem("accessToken");
   Cookies.remove("refreshToken");
 };
@@ -32,7 +32,7 @@ const getRefreshToken = (): string | undefined => {
 export {
   isValidToken,
   saveTokensToStorage,
-  removeCookiesFromStorage,
+  removeTokensFromStorage,
   getAccessToken,
   getRefreshToken,
 };
