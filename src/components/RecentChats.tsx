@@ -167,20 +167,12 @@ export default function RecentChats() {
   const handleScrollAreaLoad = () => {
     const scrollArea = document.querySelector(".your-scroll-area-class");
     if (scrollArea) {
-      console.log("hi1");
       scrollArea.scrollTo(0, scrollArea.scrollHeight);
       // scrollArea.scrollTop = scrollArea.scrollHeight - scrollArea.clientHeight;
     }
   };
   const handleScrollAreaScroll = () => {
     const scrollArea = document.querySelector(".your-scroll-area-class");
-    console.log("s");
-    if (scrollArea) {
-      console.log("hi2");
-      if (scrollArea.scrollTop === 0) {
-        console.log("hi3");
-      }
-    }
   };
 
   return (

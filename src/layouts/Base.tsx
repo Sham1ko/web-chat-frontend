@@ -1,3 +1,4 @@
+import { FC } from "react";
 import Nav from "@/components/nav";
 import RecentChats from "@/components/RecentChats";
 import { Input } from "@/components/ui/input";
@@ -17,16 +18,52 @@ import {
   Search,
   MessagesSquare,
   MessageCircleMore,
+  CircleUserIcon,
+  SettingsIcon,
+  MoonIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import NavBar from "@/components/NavBar";
+import { NavBarPropsType } from "@/components/NavBar/types";
+import { NavBarLinkType } from "@/types/NavBarLinks.type";
 
-export default function DashboardLayout({
-  defaultCollapsed = false,
-  defaultLayout = [20, 40, 40],
-  navCollapsedSize = 4,
-}) {
+const BaseLayout: FC = () => {
+  const defaultCollapsed = false;
+  const defaultLayout = [20, 40, 40];
+  const navCollapsedSize = 4;
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+
+  const Links: NavBarLinkType[] = [
+    {
+      title: "Conversations",
+      label: "9",
+      linkTo: "/",
+      icon: MessagesSquare,
+      variant: "default",
+    },
+    {
+      title: "Contacts",
+      label: "",
+      linkTo: "/contacts",
+      icon: CircleUserIcon,
+      variant: "ghost",
+    },
+    {
+      title: "Settings",
+      label: "",
+      linkTo: "/settings",
+      icon: SettingsIcon,
+      variant: "ghost",
+    },
+    {
+      title: "Dark Mode",
+      label: "",
+      linkTo: "/dark-mode",
+      icon: MoonIcon,
+      variant: "ghost",
+    },
+  ];
 
   return (
     <>
@@ -81,39 +118,7 @@ export default function DashboardLayout({
               )}
             </div>
             <Separator />
-            <Nav
-              isCollapsed={isCollapsed}
-              links={[
-                {
-                  title: "Inbox",
-                  label: "128",
-                  linkTo: "/inbox",
-                  icon: Inbox,
-                  variant: "default",
-                },
-                {
-                  title: "Drafts",
-                  label: "9",
-                  linkTo: "/drafts",
-                  icon: File,
-                  variant: "ghost",
-                },
-                {
-                  title: "Sent",
-                  label: "",
-                  linkTo: "/sent",
-                  icon: Send,
-                  variant: "ghost",
-                },
-                {
-                  title: "Junk",
-                  label: "23",
-                  linkTo: "/junk",
-                  icon: ArchiveX,
-                  variant: "ghost",
-                },
-              ]}
-            />
+            <NavBar links={Links} isCollapsed={isCollapsed} />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel
@@ -144,4 +149,6 @@ export default function DashboardLayout({
       </TooltipProvider>
     </>
   );
-}
+};
+
+export default BaseLayout;

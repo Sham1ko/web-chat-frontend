@@ -1,2 +1,2 @@
-export * from "./Router";
 export * from "./paths";
+export { default as Router } from "./Router";
