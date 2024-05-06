@@ -6,10 +6,10 @@ import {
 } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks";
 import { Button } from "../ui/button";
-import { NavBarPropsType } from "./types";
+import { SideBarPropsType } from "./types";
 import NavItem from "./NavItem";
 
-export default function NavBar({ links, isCollapsed }: NavBarPropsType) {
+export default function SideBar({ links, isCollapsed }: SideBarPropsType) {
   const { signOut } = useAuth();
   return (
     <div
@@ -18,7 +18,7 @@ export default function NavBar({ links, isCollapsed }: NavBarPropsType) {
     >
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) => {
-          return NavItem({ isCollapsed, link, index });
+          return <NavItem isCollapsed={isCollapsed} link={link} key={index} />;
         })}
         <Tooltip>
           <TooltipTrigger asChild>

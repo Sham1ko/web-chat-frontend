@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import Nav from "@/components/nav";
 import RecentChats from "@/components/RecentChats";
 import { Input } from "@/components/ui/input";
@@ -24,17 +24,18 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import NavBar from "@/components/NavBar";
-import { NavBarPropsType } from "@/components/NavBar/types";
-import { NavBarLinkType } from "@/types/NavBarLinks.type";
+import SideBar from "@/components/SideBar";
+import { NavLinkPropsType } from "@/components/SideBar/types";
+import ModalContext from "@/contexts/ModalContext";
 
 const BaseLayout: FC = () => {
   const defaultCollapsed = false;
   const defaultLayout = [20, 40, 40];
   const navCollapsedSize = 4;
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const { openModal } = useContext(ModalContext);
 
-  const Links: NavBarLinkType[] = [
+  const Links: NavLinkPropsType[] = [
     {
       title: "Conversations",
       label: "9",
@@ -45,9 +46,13 @@ const BaseLayout: FC = () => {
     {
       title: "Contacts",
       label: "",
-      linkTo: "/contacts",
+      linkTo: "#",
       icon: CircleUserIcon,
       variant: "ghost",
+      isButton: true,
+      onClick: () => {
+        openModal(true);
+      },
     },
     {
       title: "Settings",
@@ -118,7 +123,7 @@ const BaseLayout: FC = () => {
               )}
             </div>
             <Separator />
-            <NavBar links={Links} isCollapsed={isCollapsed} />
+            <SideBar links={Links} isCollapsed={isCollapsed} />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel

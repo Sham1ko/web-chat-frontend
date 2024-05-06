@@ -5,7 +5,6 @@ import Register from "@/pages/auth/Register";
 import ChatPage from "@/pages/chat";
 import { AuthGuard, GuestGuard } from "@/guards";
 import BaseLayout from "@/layouts/Base";
-import path from "path";
 import EmptyPage from "@/pages/chat/empty";
 
 export default function Router() {
